@@ -1,18 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { CreateRoleDto } from './dto/create-role.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './role.entity';
 import { RoleService } from './role.service';
 
 @Controller('role')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}
-
-  @Post()
-  @ApiOperation({ summary: 'Create a new role' })
-  @ApiResponse({ status: 201, description: 'Role created', type: Role })
-  create(@Body() createRoleDto: any): Promise<Role[]> {
-    return this.roleService.create(createRoleDto);
-  }
 
   @Get()
   @ApiOperation({ summary: 'Get all roles' })
@@ -30,12 +25,19 @@ export class RoleController {
     return this.roleService.findOne(id);
   }
 
+  @Post()
+  @ApiOperation({ summary: 'Create a new role' })
+  @ApiResponse({ status: 201, description: 'Role created', type: Role })
+  create(@Body() createRoleDto: CreateRoleDto): Promise<Role> {
+    return this.roleService.create(createRoleDto);
+  }
+
   @Put(':id')
   @ApiOperation({ summary: 'Update role by ID' })
   @ApiParam({ name: 'id', description: 'Role ID' })
   @ApiResponse({ status: 200, description: 'Role updated', type: Role })
   @ApiResponse({ status: 404, description: 'Role not found' })
-  update(@Param('id') id: string, @Body() updateRoleDto: any): Promise<Role> {
+  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto): Promise<Role> {
     return this.roleService.update(id, updateRoleDto);
   }
 

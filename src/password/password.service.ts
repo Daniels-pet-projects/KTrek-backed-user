@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreatePasswordDto } from './dto/create-password.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import { Password } from './password.entity';
 
 @Injectable()
@@ -9,11 +11,6 @@ export class PasswordService {
     @InjectRepository(Password)
     private readonly passwordRepository: Repository<Password>
   ) {}
-
-  async create(createPasswordDto: any): Promise<Password[]> {
-    const role = this.passwordRepository.create(createPasswordDto);
-    return this.passwordRepository.save(role);
-  }
 
   async findAll(): Promise<Password[]> {
     return this.passwordRepository.find();
@@ -27,7 +24,12 @@ export class PasswordService {
     return role;
   }
 
-  async update(id: string, updatePasswordDto: any): Promise<Password> {
+  async create(createPasswordDto: CreatePasswordDto): Promise<Password> {
+    const role = this.passwordRepository.create(createPasswordDto);
+    return this.passwordRepository.save(role);
+  }
+
+  async update(id: string, updatePasswordDto: UpdatePasswordDto): Promise<Password> {
     const role = await this.findOne(id);
     Object.assign(role, updatePasswordDto);
     return this.passwordRepository.save(role);
