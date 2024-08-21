@@ -7,6 +7,7 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
   const port = app.get(ConfigService).get<number>('APP_PORT') || 3000;
+  app.setGlobalPrefix('api/v1');
   const config = new DocumentBuilder()
     .setTitle('KTrek')
     .setDescription('The KTrek API description')
